@@ -193,15 +193,16 @@ void setupCamera()
     config.pixel_format = PIXFORMAT_JPEG;
 
     config.frame_size = FRAMESIZE_VGA;
-    config.jpeg_quality = 10;
+    config.jpeg_quality = 12;
     config.fb_count = 1;
 
     // if PSRAM IC present, init with UXGA resolution and higher JPEG quality
     //                      for larger pre-allocated frame buffer.
+    
     if (psramFound())
     {
-        config.frame_size = FRAMESIZE_UXGA;
-        config.jpeg_quality = 10;
+        config.frame_size = FRAMESIZE_XGA;
+        config.jpeg_quality = 12;
         config.fb_count = 2;
     }
     else
@@ -233,7 +234,7 @@ void setupCamera()
         s->set_saturation(s, -2); // lower the saturation
     }
     // drop down frame size for higher initial frame rate
-    s->set_framesize(s, FRAMESIZE_QVGA);
+    // s->set_framesize(s, FRAMESIZE_QVGA);
 
 #if defined(CAMERA_MODEL_M5STACK_WIDE) || defined(CAMERA_MODEL_M5STACK_ESP32CAM)
     s->set_vflip(s, 1);
@@ -453,23 +454,25 @@ void loop()
     //     while (true)
     //         ;
     // }
-    float humidity = dht_sensor.readHumidity();
-    float temperature = dht_sensor.readTemperature();
-    if (isnan(humidity) || isnan(temperature))
-    {
-        Serial.println("Failed to read from DHT sensor!");
-        return;
-    }
 
-    Serial.print("Humidity: ");
-    Serial.print(humidity);
-    Serial.print(" %\t");
-    Serial.print("Temperature: ");
-    Serial.print(temperature);
-    Serial.println(" *C");
+    // HUMIDITY SENSOR SAMPLE
+    // float humidity = dht_sensor.readHumidity();
+    // float temperature = dht_sensor.readTemperature();
+    // if (isnan(humidity) || isnan(temperature))
+    // {
+    //     Serial.println("Failed to read from DHT sensor!");
+    //     return;
+    // }
 
-    Serial.print("Analog output: ");
-    Serial.println(readSensor());
+    // Serial.print("Humidity: ");
+    // Serial.print(humidity);
+    // Serial.print(" %\t");
+    // Serial.print("Temperature: ");
+    // Serial.print(temperature);
+    // Serial.println(" *C");
+
+    // Serial.print("Analog output: ");
+    // Serial.println(readSensor());
 
     socketIO.loop();
 
@@ -534,7 +537,7 @@ void loop()
         //   Serial.println("°F");
         // }
 
-        delay(1000);
+        // delay(1000);
 
         // // creat JSON message for Socket.IO (event)
         // DynamicJsonDocument doc(1024);
@@ -568,5 +571,5 @@ void loop()
         // Print JSON for debugging
         // Serial.println(output);
     }
-    delay(2000);
+    // delay(2000);
 }
