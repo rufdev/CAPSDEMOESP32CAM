@@ -52,6 +52,8 @@ const int PWMLightChannel = 3;
 #define HREF_GPIO_NUM 23
 #define PCLK_GPIO_NUM 22
 
+#define LED_FLASH_GPIO_NUM 4 // Example: GPIO 4
+
 void startCameraServer();
 
 #define DHT_SENSOR_PIN 2 // Change this to the pin you've connected to the DHT sensor
@@ -198,7 +200,7 @@ void setupCamera()
 
     // if PSRAM IC present, init with UXGA resolution and higher JPEG quality
     //                      for larger pre-allocated frame buffer.
-    
+
     if (psramFound())
     {
         config.frame_size = FRAMESIZE_XGA;
@@ -240,6 +242,10 @@ void setupCamera()
     s->set_vflip(s, 1);
     s->set_hmirror(s, 1);
 #endif
+
+    // Configure the LED flash pin as output
+    pinMode(LED_FLASH_GPIO_NUM, OUTPUT);
+    digitalWrite(LED_FLASH_GPIO_NUM, LOW); // Ensure the LED is off initially
 }
 
 void setup()
@@ -438,6 +444,24 @@ void updateSerial()
 void loop()
 {
 
+    // // Example of taking a picture with flash
+    // digitalWrite(LED_FLASH_GPIO_NUM, HIGH); // Turn on the LED
+    // delay(100); // Wait for 100 milliseconds (adjust based on your flash needs)
+
+    //  // Capture an image
+    // camera_fb_t * fb = esp_camera_fb_get();
+    // if (!fb) {
+    //     Serial.println("Camera capture failed");
+    // } else {
+    //     // Use the image data from fb->buf with length fb->len
+    //     esp_camera_fb_return(fb); // Return the frame buffer back to the driver for reuse
+    // }
+
+    // digitalWrite(LED_FLASH_GPIO_NUM, LOW); // Turn off the LED
+
+    // // Add a delay or your own logic to determine when to take the next picture
+    // delay(5000); // Example: 5-second delay between
+
     if (wm_nonblocking)
         wm.process(); // avoid delays() in loop when non-blocking and other long running code
 
@@ -571,5 +595,7 @@ void loop()
         // Print JSON for debugging
         // Serial.println(output);
     }
+
+    
     // delay(2000);
 }
